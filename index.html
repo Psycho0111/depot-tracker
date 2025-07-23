@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depot-Tracker</title>
+    <!-- Haupt-Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header py-16">
+    <div class="container flex justify-between items-center gap-16">
+      <h1>Depot-Tracker</h1>
+      <div class="flex gap-8">
+        <button id="exportBtn" class="btn btn--secondary">JSON exportieren</button>
+        <label class="btn btn--secondary" for="importFile" style="cursor:pointer;">JSON importieren</label>
+        <input type="file" id="importFile" accept="application/json" class="hidden" />
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <p class="mb-8">Fülle das Formular aus und klicke „Trade hinzufügen“. Klicke auf eine Tabellenzeile, um einen Trade zu bearbeiten.</p>
+
+    <div id="editBanner" class="status status--warning mb-8 hidden">Bearbeitungsmodus aktiv – Änderungen speichern oder Abbrechen.</div>
+
+    <!-- Formular -->
+    <form id="tradeForm" class="card mb-8">
+      <div class="card__body grid grid-cols-1 md:grid-cols-2 gap-16">
+        <input type="hidden" id="editIndex" name="editIndex" value="">
+
+        <div class="form-group">
+          <label class="form-label" for="datum">Einstiegsdatum *</label>
+          <input class="form-control" type="date" id="datum" name="datum" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ticker">Ticker-Symbol *</label>
+          <input class="form-control" type="text" id="ticker" name="ticker" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="richtung">Richtung *</label>
+          <select class="form-control" id="richtung" name="richtung" required>
+            <option value="">Bitte wählen</option>
+            <option value="Kauf">Kauf</option>
+            <option value="Short">Short</option>
+            <option value="Verkauf">Verkauf</option>
+            <option value="Cover">Cover</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="anzahl">Anzahl *</label>
+          <input class="form-control" type="number" id="anzahl" name="anzahl" min="1" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="einstiegspreis">Einstiegspreis € *</label>
+          <input class="form-control" type="number" id="einstiegspreis" name="einstiegspreis" step="0.01" min="0" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="gebuehren">Gebühren €</label>
+          <input class="form-control" type="number" id="gebuehren" name="gebuehren" step="0.01" min="0" value="0">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ausstiegsdatum">Ausstiegsdatum</label>
+          <input class="form-control" type="date" id="ausstiegsdatum" name="ausstiegsdatum">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="ausstiegspreis">Ausstiegspreis €</label>
+          <input class="form-control" type="number" id="ausstiegspreis" name="ausstiegspreis" step="0.01" min="0">
+        </div>
+        <div class="form-group md:col-span-2">
+          <label class="form-label" for="notizen">Notizen</label>
+          <textarea class="form-control" id="notizen" name="notizen" rows="3"></textarea>
+        </div>
+        <div class="flex gap-8 md:col-span-2">
+          <button type="submit" id="saveBtn" class="btn btn--primary">Trade hinzufügen</button>
+          <button type="button" id="cancelBtn" class="btn btn--secondary hidden">Abbrechen</button>
+        </div>
+      </div>
+    </form>
+
+    <!-- Tabelle -->
+    <div class="card table-card mb-8">
+      <div class="card__body table-wrapper">
+        <table id="tradesTable" class="trade-table">
+          <thead>
+            <tr id="tableHeader">
+              <th data-key="index">Nr</th>
+              <th data-key="datum">Datum Einstieg</th>
+              <th data-key="ticker">Ticker</th>
+              <th data-key="richtung">Richtung</th>
+              <th data-key="anzahl">Anzahl</th>
+              <th data-key="einstiegspreis">Einstieg €</th>
+              <th data-key="ausstiegsdatum">Ausstiegsdatum</th>
+              <th data-key="ausstiegspreis">Ausstieg €</th>
+              <th data-key="pl">G/V €</th>
+              <th data-key="plpct">G/V %</th>
+              <th data-key="tage">Tage</th>
+              <th data-key="gebuehren">Gebühren €</th>
+              <th data-key="notizen">Notizen</th>
+              <th>Aktionen</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="14" style="text-align:center;font-style:italic;">Keine Trades vorhanden</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Statistiken -->
+    <section id="stats" class="flex flex-wrap gap-16"></section>
+
+  </main>
+
+  <!-- Haupt-Skripte -->
+  <script src="app.js"></script>
+</body>
+</html>
